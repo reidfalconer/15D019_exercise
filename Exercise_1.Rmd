@@ -286,6 +286,10 @@ stargazer(model_1,
           model.names = TRUE,
           covariate.labels = c("ln(Hellman price)"))
 ```
+<details>
+  <summary>Estimated Equation</summary>
+  $\left.\begin{aligned} \log ( Q ) & = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha & = \log ( A ) \\ \beta & = - \eta \end{aligned} \right.$
+</details>
 
 ###### Kraft at Jewel 
 ```{r model_2, echo = TRUE, results = 'asis'}
@@ -303,6 +307,10 @@ stargazer(model_2,
           model.names = TRUE,
           covariate.labels = c("ln(Kraft price)"))
 ```
+<details>
+  <summary>Estimated Equation</summary>
+  $\left.\begin{aligned} \log ( Q ) & = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha & = \log ( A ) \\ \beta & = - \eta \end{aligned} \right.$
+</details>
 
 ##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). {.tabset}
 

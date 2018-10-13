@@ -586,6 +586,9 @@ F Statistic
 </td>
 </tr>
 </table>
+<details>
+<summary>Estimated Equation</summary> <span class="math inline">\(\left.\begin{aligned} \log ( Q ) &amp; = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha &amp; = \log ( A ) \\ \beta &amp; = - \eta \end{aligned} \right.\)</span>
+</details>
 </div>
 <div id="kraft-at-jewel" class="section level6">
 <h6>Kraft at Jewel</h6>
@@ -715,6 +718,9 @@ F Statistic
 </td>
 </tr>
 </table>
+<details>
+<summary>Estimated Equation</summary> <span class="math inline">\(\left.\begin{aligned} \log ( Q ) &amp; = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha &amp; = \log ( A ) \\ \beta &amp; = - \eta \end{aligned} \right.\)</span>
+</details>
 </div>
 </div>
 <div id="fit-the-multiplicative-demand-model-discussed-in-class-for-kraft-and-hellmans-for-the-central-region-i.e.2-separate-regressions-one-for-hellmans-and-one-for-kraft." class="section level5 tabset">
@@ -1162,7 +1168,9 @@ F Statistic
 </div>
 <div id="kraft-at-jewel-2" class="section level6">
 <h6>Kraft at Jewel</h6>
-<pre class="r"><code>model_6 &lt;- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)</code></pre>
+<pre class="r"><code>model_6 &lt;- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
+# x = hellman_at_jewel
+# y = kraft_at_jewel</code></pre>
 <table style="text-align:center">
 <caption>
 <strong>Sales of Kraft at Jewel</strong>
