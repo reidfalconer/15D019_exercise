@@ -9,7 +9,6 @@
 # Different parts of the preparation have been modularised.
 
 # Functions ===
-
 getdata <- function(file){
     #returns the file specified with processed dates.
     
@@ -23,10 +22,10 @@ getdata <- function(file){
     mydata$date1 <- substr(mydata$date, start = 1, stop = 7)
     
     # now we can convert it to the Date class, but first setting the locale
-    lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+    # lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
 
     mydata$date2 <- as.Date(mydata$date1, "%b%d%y")
-    mydata$date2 <- ts(mydata$date2)
+   # mydata$date2 <- ts(mydata$date2)
     
     mydata
 }
@@ -39,7 +38,8 @@ createVariables <- function(mydata) {
     ln_sales_u <- log(mydata$Sales_U) #first 16 values are nonsensical
     ln_price <- log(price)#first 16 values are nonsensical
     
-    df <- data.frame(price = price, sales_u = sales_u, ln_sales_u = ln_sales_u, ln_price = ln_price, date2 = mydata$date2)
+    df <- data.frame(price = price, sales_u = sales_u, ln_sales_u = ln_sales_u, ln_price = ln_price, date2 = mydata$date2) %>% 
+        na.omit()
 }
 
 runRegression <- function(vars.df) {
@@ -49,7 +49,6 @@ runRegression <- function(vars.df) {
 
 merged.df <- function(data1, data2){
     #removes ln_sales from data1 and merges with data2
-    
     merge(data1[, -3], data2, by = "date2")
 }
 
@@ -90,6 +89,24 @@ hellman_at_central <- createVariables(getdata("data/KC_HL32.csv"))
 #time series plots
 plot(hellman_at_central$date2, hellman_at_central$price, col = "blue", xy.labels = F, type = "l")
 plot(hellman_at_central$date2, hellman_at_central$sales_u, col = "red", xy.labels = F, type = "l")
+# 
+# ggplot(hellman_at_central, aes(x=date2)) +
+#     geom_line(aes(y=sales_u, col="Sales")) +
+#   #  ylim(-8.5, 5.5) +
+#     labs(#title="ANN Regression Forecast",
+#   #       subtitle="Forecasts from the ANN model vs actual GDP data",
+#     caption="Source: Own Compilation", y="Sales", x = "Date") +  # title and caption
+#     scale_color_manual(name="", values = c("Sales"="turquoise4"))  # line color
+#   #  theme(legend.key = element_rect(fill = "white", colour = "black"))
+# 
+# ggplot(hellman_at_central, aes(x=date2)) +
+#     geom_line(aes(y=price, col="Price")) +
+#     #  ylim(-8.5, 5.5) +
+#     labs(#title="ANN Regression Forecast",
+#         #       subtitle="Forecasts from the ANN model vs actual GDP data",
+#     caption="Source: Own Compilation", y="Price", x = "Date") +  # title and caption
+#     scale_color_manual(name="", values = c("Price"="coral"))  # line color
+# #  theme(legend.key = element_rect(fill = "white", colour = "black"))
 
 #scatter plot
 plot(hellman_at_central$price, hellman_at_central$sales_u)
@@ -126,17 +143,17 @@ hellman.jewel_kraft.price <- merged.df(kraft_at_jewel, hellman_at_jewel)
 summary(lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.price))
 
 #############################################################################
-#Hellman at Central  with Kraft price
-hellman.central_kraft <- merged.df(kraft_at_central ,hellman_at_central)
+#Hellman at Central with Kraft price
+hellman.central_kraft.price <- merged.df(kraft_at_central, hellman_at_central)
 #x = kraft_at_central, y = hellman_at_central
-summary(lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.central_kraft))
+summary(lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.central_kraft.price))
 
 #############################################################################
 #Kraft at Central with Hellman price
 kraft.central_hellman.price <- merged.df(hellman_at_central, kraft_at_central)
 #x = hellman_at_central, y = kraft_at_central
 summary(lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.central_hellman.price))
-
+    
 #############################################################################
 #Kraft at Jewel with Hellman price
 kraft.jewel_hellman.price <- merged.df(hellman_at_jewel, kraft_at_jewel)
