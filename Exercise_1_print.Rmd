@@ -145,6 +145,8 @@ hellman_central_sales_plot <- ggplot(hellman_at_central, aes(x=date2)) +
 
 hellman_central_price_plot <- ggplot(hellman_at_central, aes(x=date2)) + 
   geom_line(aes(y=price, col="Price")) + 
+  geom_line(data =na.omit(hellman_at_jewel), aes(y=price, col="Price"), 
+  linetype ="dashed", alpha = 0.7) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
@@ -152,7 +154,7 @@ hellman_central_price_plot <- ggplot(hellman_at_central, aes(x=date2)) +
   y="Price", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Price"="coral"))  # line color
 
-hellman_jewel_sales_plot <- ggplot(hellman_at_jewel, aes(x=date2)) + 
+hellman_jewel_sales_plot <- ggplot(na.omit(hellman_at_jewel), aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
   theme_grey() + 
   theme(text = element_text(size=8)) +
@@ -161,8 +163,10 @@ hellman_jewel_sales_plot <- ggplot(hellman_at_jewel, aes(x=date2)) +
   y="Sales", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Sales"="turquoise4"))  # line color
 
-hellman_jewel_price_plot <- ggplot(hellman_at_jewel, aes(x=date2)) + 
-  geom_line(aes(y=price, col="Price")) + 
+hellman_jewel_price_plot <- ggplot(na.omit(hellman_at_jewel), aes(x=date2)) + 
+  geom_line(aes(y=price, col="Price")) +
+  geom_line(data =na.omit(hellman_at_central), aes(y=price, col="Price"), 
+  linetype ="dashed", alpha = 0.7) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
@@ -186,6 +190,8 @@ kraft_central_sales_plot <- ggplot(kraft_at_central, aes(x=date2)) +
 
 kraft_central_price_plot <- ggplot(kraft_at_central, aes(x=date2)) + 
   geom_line(aes(y=price, col="Price")) + 
+  geom_line(data =na.omit(kraft_at_jewel), aes(y=price, col="Price"), 
+  linetype ="dashed", alpha = 0.7) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
@@ -193,7 +199,7 @@ kraft_central_price_plot <- ggplot(kraft_at_central, aes(x=date2)) +
   y="Price", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Price"="coral"))  # line color
 
-kraft_jewel_sales_plot <- ggplot(kraft_at_jewel, aes(x=date2)) + 
+kraft_jewel_sales_plot <- ggplot(na.omit(kraft_at_jewel), aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
   theme_grey() + 
   theme(text = element_text(size=8)) +
@@ -202,8 +208,10 @@ kraft_jewel_sales_plot <- ggplot(kraft_at_jewel, aes(x=date2)) +
   y="Sales", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Sales"="turquoise4"))  # line color
 
-kraft_jewel_price_plot <- ggplot(kraft_at_jewel, aes(x=date2)) + 
-  geom_line(aes(y=price, col="Price")) + 
+kraft_jewel_price_plot <- ggplot(na.omit(kraft_at_jewel), aes(x=date2)) + 
+  geom_line(aes(y=price, col="Price")) +
+  geom_line(data =na.omit(kraft_at_central), aes(y=price, col="Price"), 
+  linetype ="dashed", alpha = 0.7) +
   theme_grey() + 
   theme(legend.position="none") +
   theme(text = element_text(size=8)) +
@@ -211,7 +219,26 @@ kraft_jewel_price_plot <- ggplot(kraft_at_jewel, aes(x=date2)) +
   y="Price", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Price"="coral")) # line color
 
+price_plots <- ggplot(kraft_at_jewel, aes(x=date2)) + 
+  geom_line(aes(y=price, colour = "#0399a8")) +
+  geom_line(data =na.omit(kraft_at_central), aes(y=price, colour = "coral")) +
+  geom_line(data =na.omit(hellman_at_central), aes(y=price, colour = "#418f9b")) +
+  geom_line(data =na.omit(hellman_at_jewel), aes(y=price, colour = "#985fd8")) +
+  theme(legend.position="right") +
+  theme_grey() + 
+  theme(text = element_text(size=8)) +
+  labs(title="Prices for Kraft and Hellman's in Jewel and Central Region", 
+  y="Price", x = "Date") + # title and caption
+  scale_fill_discrete(name='Price',labels=c("Kraft in Jewel", "Hellman in Central Region", "Hellman in Jewel",  "Kraft in Central Region")) +
+  scale_color_discrete(name='Price',labels=c("Kraft in Jewel", "Hellman in Central Region", "Hellman in Jewel",  "Kraft in Central Region")) # line color
+
+
 cowplot::plot_grid(kraft_central_sales_plot, kraft_central_price_plot, kraft_jewel_sales_plot, kraft_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
+```
+
+
+```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, fig.height= 3}
+price_plots 
 ```
 
 ##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)?
@@ -232,7 +259,7 @@ scatter_hellmans_central <- ggplot(hellman_at_central, aes(x=sales_u, y=price, c
        subtitle = "for Hellmans in the Central Region",
   y="Price", x = "Sales") 
 
-scatter_hellmans_jewel <- ggplot(hellman_at_jewel, aes(x=sales_u, y=price, color)) +
+scatter_hellmans_jewel <- ggplot(na.omit(hellman_at_jewel), aes(x=sales_u, y=price, color)) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   geom_line(stat="smooth",method = "loess", formula = y ~ x,
@@ -261,7 +288,7 @@ scatter_kraft_central <- ggplot(kraft_at_central, aes(x=sales_u, y=price, color)
               subtitle = "for Kraft in the Central Region",
   y="Price", x = "Sales") 
 
-scatter_kraft_jewel <- ggplot(kraft_at_jewel, aes(x=sales_u, y=price, color)) +
+scatter_kraft_jewel <- ggplot(na.omit(kraft_at_jewel), aes(x=sales_u, y=price, color)) +
   theme_grey() + 
   theme(text = element_text(size=8)) +  
   geom_line(stat="smooth",method = "loess", formula = y ~ x,
@@ -450,7 +477,7 @@ hellman_coeff <- tidy_model_6$estimate[2]
 kraft_coeff <- tidy_model_6$estimate[3]
 
 # Hellman’s price is cut by 10% at Jewel
-change <- compute_change(-10, hellman_coeff)
+change <- compute_change(-100., hellman_coeff)
 
 # A function to aid with solving
 f <- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - change$numeric)
@@ -458,6 +485,9 @@ percent <- uniroot(f, lower=0, upper=100)$root
 ```
 
 Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by `r percent`% to obtain the same sales that we currently enjoy.
+
+
+
 
 
 

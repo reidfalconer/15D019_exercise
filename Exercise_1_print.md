@@ -96,13 +96,16 @@ What does this tell you upfront about your ability to estimate price elasticitie
 #### Kraft
 <img src="Exercise_1_print_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
+
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+
 ##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)?
 
 #### Hellmans
-<img src="Exercise_1_print_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 #### Kraft
-<img src="Exercise_1_print_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 ## Demand Estimation
 
@@ -358,14 +361,17 @@ hellman_coeff <- tidy_model_6$estimate[2]
 kraft_coeff <- tidy_model_6$estimate[3]
 
 # Hellman’s price is cut by 10% at Jewel
-change <- compute_change(-10, hellman_coeff)
+change <- compute_change(-100., hellman_coeff)
 
 # A function to aid with solving
 f <- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - change$numeric)
 percent <- uniroot(f, lower=0, upper=100)$root
 ```
 
-Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by 3.64% to obtain the same sales that we currently enjoy.
+Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by 14.457% to obtain the same sales that we currently enjoy.
+
+
+
 
 
 
