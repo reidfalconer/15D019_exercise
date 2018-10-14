@@ -17,10 +17,10 @@ Author: Reid Falconer
   --DARKBLUE: #241F55;
   --PI_BLUE: #66CABF;
   --TT_YELLOW: #FFF200;
-  --TT_BLUE: #0399a8 /*#303181;*/
+  --TT_BLUE: #0399a8;
   --TT_GREEN: #43B54E;
   --TT_PURPLE: #532A86;
-	--LOGOHEIGHT: 150px;
+	--LOGOHEIGHT: 200px;
 	--MARGINHEIGHT: 300px;
 }
 
@@ -92,7 +92,6 @@ a {
 }
 
 /* CUSTOM */
-
 .summary {
   padding-left: 20px;
   border-left: solid 5px var(--TT_BLUE);
@@ -134,7 +133,7 @@ h1.title {
 }
 
 img.logo {
-	height: 250px;
+	height: 280px;
 }
 
 /* datatables formatting */
@@ -175,4 +174,16 @@ table.dataTable thead th, table.dataTable thead td {
 /* Hide compact dataTables completely */
 .compact.dataTable.no-footer {
 	display: none;
+}
+
+table, td {
+  border: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  min-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  text-align: center;
 }

@@ -48,6 +48,14 @@ options(knitr.table.format = "html")
 source('scripts/ex1hints.R')
 ```
 
+<div class="summary">
+<h3>
+Summary
+</h3>
+In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).
+</div>
+
+
 ## Data Check
 
 ##### 1. Construct a price variable by dividing $ sales by unit sales (employ the `sales_$` and `sales_u` variables). Explain how to interpret this price variable (i.e. what sort of average price is this?).
@@ -308,11 +316,15 @@ cowplot::plot_grid(scatter_kraft_central, scatter_kraft_jewel, labels = c("", ""
 
 ##### 1. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's at Jewel (i.e. 2 separate regressions, one for Hellman's, and one for Kraft).
 
-#### Hellman at Jewel 
-```{r model_1, echo = TRUE, results = 'asis'}
+#### Hellman and Kraft at Jewel 
+```{r model_2, echo = TRUE, results = 'asis'}
 model_1 <- runRegression(hellman_at_jewel)
+model_2 <- runRegression(kraft_at_jewel)
 ```
-```{r regression_1, echo = FALSE, results = 'asis'}
+
+<div class = "row">
+<div class = "col-md-6">
+```{r regression_1, echo = FALSE, results = 'asis', out.width=c('50%', '50%')}
 tidy_model_1 <- broom::tidy(model_1)
 stargazer(model_1, 
           align=TRUE,
@@ -323,13 +335,9 @@ stargazer(model_1,
           model.names = TRUE,
           covariate.labels = c("ln(Hellman price)"))
 ```
-
-#### Kraft at Jewel 
-```{r model_2, echo = TRUE, results = 'asis'}
-model_2 <- runRegression(kraft_at_jewel)
-```
-
-```{r regression_2, echo = FALSE, results = 'asis'}
+</div>
+<div class = "col-md-6">
+```{r regression_2, echo = FALSE, results = 'asis', out.width=c('50%', '50%')}
 tidy_model_2 <- broom::tidy(model_2)
 stargazer(model_2, 
           align=TRUE,
@@ -340,13 +348,18 @@ stargazer(model_2,
           model.names = TRUE,
           covariate.labels = c("ln(Kraft price)"))
 ```
+</div>
+</div>
 
 ##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). 
 
-#### Hellman at Central 
+#### Hellman and Kraft at Central 
 ```{r regression_3, echo = TRUE, results = 'asis'}
 model_3 <- runRegression(hellman_at_central)
+model_4 <- runRegression(kraft_at_central)
 ```
+<div class = "row">
+<div class = "col-md-6">
 ```{r model_3, echo = FALSE, results = 'asis'}
 tidy_model_3 <- broom::tidy(model_3)
 stargazer (model_3,
@@ -357,11 +370,8 @@ stargazer (model_3,
            model.names = TRUE,
            covariate.labels = c("ln(Hellman price)"))
 ```
-
-#### Kraft at Central
-```{r regression_4, echo = TRUE, results = 'asis'}
-model_4 <- runRegression(kraft_at_central)
-```
+</div>
+<div class = "col-md-6">
 ```{r model_4, echo = FALSE, results = 'asis'}
 tidy_model_4 <- broom::tidy(model_4)
 stargazer (model_4,
@@ -372,6 +382,8 @@ stargazer (model_4,
            model.names = TRUE,
            covariate.labels = c("ln(Kraft price)"))
 ```
+</div>
+</div>
 
 ##### 3. Elasticity differences: Is the demand elasticity higher (in absolute magnitude) at the Jewel account or in the Central Region? Can you offer some compelling explanations for the difference? (think of as many potential reasons as possible) 
 
@@ -426,12 +438,19 @@ Therefore, a 10% increase in the price of Kraft at Jewel results in a `r change_
 
 ##### 5. Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). 
 
-#### Hellman at Jewel 
+#### Hellman and Kraft at Jewel 
 ```{r model_5, echo = TRUE, results = 'asis'}
 model_5 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.price)
 # x = kraft_at_jewel
 # y = hellman_at_jewel
+
+model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
+# x = hellman_at_jewel
+# y = kraft_at_jewel
 ```
+
+<div class = "row">
+<div class = "col-md-6">
 ```{r regression_5, echo = FALSE, results = 'asis'}
 tidy_model_5 <- broom::tidy(model_5)
 stargazer(model_5, 
@@ -443,13 +462,8 @@ stargazer(model_5,
           model.names = TRUE,
           covariate.labels = c("ln(Kraft price)", "ln(Hellman price)"))
 ```
-
-#### Kraft at Jewel 
-```{r model_6, echo = TRUE, results = 'asis'}
-model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
-# x = hellman_at_jewel
-# y = kraft_at_jewel
-```
+</div>
+<div class = "col-md-6">
 ```{r regression_6, echo = FALSE, results = 'asis'}
 tidy_model_6 <- broom::tidy(model_6)
 stargazer(model_6, 
@@ -461,6 +475,8 @@ stargazer(model_6,
           model.names = TRUE,
           covariate.labels = c("ln(Hellman price)", "ln(Kraft price)"))
 ```
+</div>
+</div>
 
 #####  6. You may be called upon to report to your manager whether your brand is vulnerable to a competitor's pricing policies. That is, to what extent does the demand for your product depend on (or is affected by) your competitors' pricing policy? From the results in 5, which brand is more "vulnerable"? Be specific as to why.
 

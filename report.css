@@ -176,3 +176,16 @@ table.dataTable thead th, table.dataTable thead td {
 .compact.dataTable.no-footer {
 	display: none;
 }
+
+
+table, td {
+  border: none;
+  padding-left: 20px;
+  padding-right: 2em;
+  min-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  text-align: center;
+}

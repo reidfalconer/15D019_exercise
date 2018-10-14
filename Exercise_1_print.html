@@ -1611,10 +1611,10 @@ h6 {
 --DARKBLUE: #241F55;
 --PI_BLUE: #66CABF;
 --TT_YELLOW: #FFF200;
---TT_BLUE: #0399a8 
+--TT_BLUE: #0399a8;
 --TT_GREEN: #43B54E;
 --TT_PURPLE: #532A86;
---LOGOHEIGHT: 150px;
+--LOGOHEIGHT: 200px;
 --MARGINHEIGHT: 300px;
 }
 
@@ -1706,7 +1706,7 @@ padding-bottom: 20px;
 text-align: center;
 }
 img.logo {
-height: 250px;
+height: 280px;
 }
 
 table.dataTable tbody td {
@@ -1739,6 +1739,17 @@ width: 100% !important;
 
 .compact.dataTable.no-footer {
 display: none;
+}
+table, td {
+border: none;
+padding-left: 10px;
+padding-right: 10px;
+min-width: 50%;
+margin-left: auto;
+margin-right: auto;
+margin-top: 2em;
+margin-bottom: 2em;
+text-align: center;
 }</style>
 
 </head>
@@ -1823,6 +1834,12 @@ $(document).ready(function () {
     background-color: #0399a8;
 }
 </style>
+<div class="summary">
+<h3>
+Summary
+</h3>
+<p>In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).</p>
+</div>
 <div id="data-check" class="section level2">
 <h2>Data Check</h2>
 <div id="construct-a-price-variable-by-dividing-sales-by-unit-sales-employ-the-sales_-and-sales_u-variables.-explain-how-to-interpret-this-price-variable-i.e.what-sort-of-average-price-is-this." class="section level5">
@@ -1897,9 +1914,12 @@ sd_kraft &lt;- df_kraft %&gt;% group_by(region) %&gt;% summarize(grp_sd = sd(val
 <div id="fit-the-multiplicative-demand-model-discussed-in-class-for-kraft-and-hellmans-at-jewel-i.e.2-separate-regressions-one-for-hellmans-and-one-for-kraft." class="section level5">
 <h5>1. Fit the “multiplicative” demand model discussed in class for Kraft and Hellman’s at Jewel (i.e. 2 separate regressions, one for Hellman’s, and one for Kraft).</h5>
 </div>
-<div id="hellman-at-jewel" class="section level4">
-<h4>Hellman at Jewel</h4>
-<pre class="r"><code>model_1 &lt;- runRegression(hellman_at_jewel)</code></pre>
+<div id="hellman-and-kraft-at-jewel" class="section level4">
+<h4>Hellman and Kraft at Jewel</h4>
+<pre class="r"><code>model_1 &lt;- runRegression(hellman_at_jewel)
+model_2 &lt;- runRegression(kraft_at_jewel)</code></pre>
+<div class="row">
+<div class="col-md-6">
 <table style="text-align:center">
 <caption>
 <strong>Sales of Hellman at Jewel</strong>
@@ -2026,9 +2046,7 @@ F Statistic
 </tr>
 </table>
 </div>
-<div id="kraft-at-jewel" class="section level4">
-<h4>Kraft at Jewel</h4>
-<pre class="r"><code>model_2 &lt;- runRegression(kraft_at_jewel)</code></pre>
+<div class="col-md-6">
 <table style="text-align:center">
 <caption>
 <strong>Sales of Kraft at Jewel</strong>
@@ -2154,13 +2172,18 @@ F Statistic
 </td>
 </tr>
 </table>
+</div>
+</div>
 <div id="fit-the-multiplicative-demand-model-discussed-in-class-for-kraft-and-hellmans-for-the-central-region-i.e.2-separate-regressions-one-for-hellmans-and-one-for-kraft." class="section level5">
 <h5>2. Fit the “multiplicative” demand model discussed in class for Kraft and Hellman’s for the Central Region (i.e. 2 separate regressions, one for Hellman’s, and one for Kraft).</h5>
 </div>
 </div>
-<div id="hellman-at-central" class="section level4">
-<h4>Hellman at Central</h4>
-<pre class="r"><code>model_3 &lt;- runRegression(hellman_at_central)</code></pre>
+<div id="hellman-and-kraft-at-central" class="section level4">
+<h4>Hellman and Kraft at Central</h4>
+<pre class="r"><code>model_3 &lt;- runRegression(hellman_at_central)
+model_4 &lt;- runRegression(kraft_at_central)</code></pre>
+<div class="row">
+<div class="col-md-6">
 <table style="text-align:center">
 <caption>
 <strong>Sales of Hellman at Central</strong>
@@ -2287,9 +2310,7 @@ F Statistic
 </tr>
 </table>
 </div>
-<div id="kraft-at-central" class="section level4">
-<h4>Kraft at Central</h4>
-<pre class="r"><code>model_4 &lt;- runRegression(kraft_at_central)</code></pre>
+<div class="col-md-6">
 <table style="text-align:center">
 <caption>
 <strong>Sales of Kraft at Central</strong>
@@ -2415,6 +2436,8 @@ F Statistic
 </td>
 </tr>
 </table>
+</div>
+</div>
 <div id="elasticity-differences-is-the-demand-elasticity-higher-in-absolute-magnitude-at-the-jewel-account-or-in-the-central-region-can-you-offer-some-compelling-explanations-for-the-difference-think-of-as-many-potential-reasons-as-possible" class="section level5">
 <h5>3. Elasticity differences: Is the demand elasticity higher (in absolute magnitude) at the Jewel account or in the Central Region? Can you offer some compelling explanations for the difference? (think of as many potential reasons as possible)</h5>
 <pre class="r"><code>data.frame(
@@ -2478,7 +2501,7 @@ Kraft at Central
 <h5>4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman’s at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator).</h5>
 </div>
 </div>
-<div id="hellman-at-jewel-1" class="section level4">
+<div id="hellman-at-jewel" class="section level4">
 <h4>Hellman at Jewel</h4>
 <pre class="r"><code># To get the proportional change in Y associated with a p percent increase in X, calculate
 # a = ([100 + p]/100) and take a^β
@@ -2500,7 +2523,7 @@ compute_change &lt;- function(percent_change, price_coeff) {
 change_hellman &lt;- compute_change(10, price_coeff)</code></pre>
 <p>Therefore, a 10% increase in the price of Hellman’s at Jewel results in a 35.39% decrease in unit sales of Hellman’s at Jewel ceteris paribus.</p>
 </div>
-<div id="kraft-at-jewel-1" class="section level4">
+<div id="kraft-at-jewel" class="section level4">
 <h4>Kraft at Jewel</h4>
 <pre class="r"><code># To get the proportional change in Y associated with a p percent increase in X, calculate
 # a = ([100 + p]/100) and take a^β
@@ -2511,11 +2534,17 @@ change_kraft &lt;- compute_change(10, price_coeff)</code></pre>
 <h5>5. Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the “multiplicative” demand model for Kraft and Hellman’s at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman’s, and one for Kraft, with Hellman’s own price and Kraft’s price affecting sales of Hellman’s; and Kraft’s own price and Hellman’s price affecting sales of Kraft).</h5>
 </div>
 </div>
-<div id="hellman-at-jewel-2" class="section level4">
-<h4>Hellman at Jewel</h4>
+<div id="hellman-and-kraft-at-jewel-1" class="section level4">
+<h4>Hellman and Kraft at Jewel</h4>
 <pre class="r"><code>model_5 &lt;- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.price)
 # x = kraft_at_jewel
-# y = hellman_at_jewel</code></pre>
+# y = hellman_at_jewel
+
+model_6 &lt;- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
+# x = hellman_at_jewel
+# y = kraft_at_jewel</code></pre>
+<div class="row">
+<div class="col-md-6">
 <table style="text-align:center">
 <caption>
 <strong>Sales of Hellman at Jewel</strong>
@@ -2663,11 +2692,7 @@ F Statistic
 </tr>
 </table>
 </div>
-<div id="kraft-at-jewel-2" class="section level4">
-<h4>Kraft at Jewel</h4>
-<pre class="r"><code>model_6 &lt;- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
-# x = hellman_at_jewel
-# y = kraft_at_jewel</code></pre>
+<div class="col-md-6">
 <table style="text-align:center">
 <caption>
 <strong>Sales of Kraft at Jewel</strong>
@@ -2814,6 +2839,8 @@ F Statistic
 </td>
 </tr>
 </table>
+</div>
+</div>
 <div id="you-may-be-called-upon-to-report-to-your-manager-whether-your-brand-is-vulnerable-to-a-competitors-pricing-policies.-that-is-to-what-extent-does-the-demand-for-your-product-depend-on-or-is-affected-by-your-competitors-pricing-policy-from-the-results-in-5-which-brand-is-more-vulnerable-be-specific-as-to-why." class="section level5">
 <h5>6. You may be called upon to report to your manager whether your brand is vulnerable to a competitor’s pricing policies. That is, to what extent does the demand for your product depend on (or is affected by) your competitors’ pricing policy? From the results in 5, which brand is more “vulnerable”? Be specific as to why.</h5>
 <p>Kraft at Jewel seems to be more “vulnerable” to Hellman’s pricing policy that Hellman’s is to Kraft’s pricing policy at Jewel. This is motivated by the above regression analysis, where it is shown that Kraft’s sales at Jewel are significantly affected by Hellman’s price (with a large and statistically significant coeffcient of 1.871 at the 1% level of significance), whereas Hellman’s sales at Jewel are insignificantly affected by Kraft’s price (with a small and insignificant coeffcient of 0.196).</p>

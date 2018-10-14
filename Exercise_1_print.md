@@ -28,6 +28,14 @@ output:
 </style>
 
 
+<div class="summary">
+<h3>
+Summary
+</h3>
+In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).
+</div>
+
+
 ## Data Check
 
 ##### 1. Construct a price variable by dividing $ sales by unit sales (employ the `sales_$` and `sales_u` variables). Explain how to interpret this price variable (i.e. what sort of average price is this?).
@@ -111,11 +119,15 @@ What does this tell you upfront about your ability to estimate price elasticitie
 
 ##### 1. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's at Jewel (i.e. 2 separate regressions, one for Hellman's, and one for Kraft).
 
-#### Hellman at Jewel 
+#### Hellman and Kraft at Jewel 
 
 ```r
 model_1 <- runRegression(hellman_at_jewel)
+model_2 <- runRegression(kraft_at_jewel)
 ```
+
+<div class = "row">
+<div class = "col-md-6">
 
 <table style="text-align:center"><caption><strong>Sales of Hellman at Jewel</strong></caption>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>ln(Hellman Sales)</td></tr>
@@ -133,13 +145,8 @@ model_1 <- runRegression(hellman_at_jewel)
 <tr><td style="text-align:left">F Statistic</td><td>115.000<sup>***</sup> (df = 1; 86)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
-
-#### Kraft at Jewel 
-
-```r
-model_2 <- runRegression(kraft_at_jewel)
-```
-
+</div>
+<div class = "col-md-6">
 
 <table style="text-align:center"><caption><strong>Sales of Kraft at Jewel</strong></caption>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>ln(Kraft Sales)</td></tr>
@@ -157,14 +164,19 @@ model_2 <- runRegression(kraft_at_jewel)
 <tr><td style="text-align:left">F Statistic</td><td>270.000<sup>***</sup> (df = 1; 86)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
+</div>
+</div>
 
 ##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). 
 
-#### Hellman at Central 
+#### Hellman and Kraft at Central 
 
 ```r
 model_3 <- runRegression(hellman_at_central)
+model_4 <- runRegression(kraft_at_central)
 ```
+<div class = "row">
+<div class = "col-md-6">
 
 <table style="text-align:center"><caption><strong>Sales of Hellman at Central</strong></caption>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>ln(Hellman Sales)</td></tr>
@@ -182,12 +194,8 @@ model_3 <- runRegression(hellman_at_central)
 <tr><td style="text-align:left">F Statistic</td><td>18.600<sup>***</sup> (df = 1; 102)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
-
-#### Kraft at Central
-
-```r
-model_4 <- runRegression(kraft_at_central)
-```
+</div>
+<div class = "col-md-6">
 
 <table style="text-align:center"><caption><strong>Sales of Kraft at Central</strong></caption>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>ln(Kraft Sales)</td></tr>
@@ -205,6 +213,8 @@ model_4 <- runRegression(kraft_at_central)
 <tr><td style="text-align:left">F Statistic</td><td>27.600<sup>***</sup> (df = 1; 102)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
+</div>
+</div>
 
 ##### 3. Elasticity differences: Is the demand elasticity higher (in absolute magnitude) at the Jewel account or in the Central Region? Can you offer some compelling explanations for the difference? (think of as many potential reasons as possible) 
 
@@ -289,13 +299,20 @@ Therefore, a 10% increase in the price of Kraft at Jewel results in a 32.78% dec
 
 ##### 5. Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). 
 
-#### Hellman at Jewel 
+#### Hellman and Kraft at Jewel 
 
 ```r
 model_5 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.price)
 # x = kraft_at_jewel
 # y = hellman_at_jewel
+
+model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
+# x = hellman_at_jewel
+# y = kraft_at_jewel
 ```
+
+<div class = "row">
+<div class = "col-md-6">
 
 <table style="text-align:center"><caption><strong>Sales of Hellman at Jewel</strong></caption>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>ln(Hellman Sales)</td></tr>
@@ -316,14 +333,8 @@ model_5 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.p
 <tr><td style="text-align:left">F Statistic</td><td>57.900<sup>***</sup> (df = 2; 85)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
-
-#### Kraft at Jewel 
-
-```r
-model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
-# x = hellman_at_jewel
-# y = kraft_at_jewel
-```
+</div>
+<div class = "col-md-6">
 
 <table style="text-align:center"><caption><strong>Sales of Kraft at Jewel</strong></caption>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>ln(Kraft Sales)</td></tr>
@@ -344,6 +355,8 @@ model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.p
 <tr><td style="text-align:left">F Statistic</td><td>164.000<sup>***</sup> (df = 2; 85)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
+</div>
+</div>
 
 #####  6. You may be called upon to report to your manager whether your brand is vulnerable to a competitor's pricing policies. That is, to what extent does the demand for your product depend on (or is affected by) your competitors' pricing policy? From the results in 5, which brand is more "vulnerable"? Be specific as to why.
 

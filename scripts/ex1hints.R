@@ -22,7 +22,7 @@ getdata <- function(file){
     mydata$date1 <- substr(mydata$date, start = 1, stop = 7)
     
     # now we can convert it to the Date class, but first setting the locale
-    lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+    #lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
 
     mydata$date2 <- as.Date(mydata$date1, "%b%d%y")
    # mydata$date2 <- ts(mydata$date2)
