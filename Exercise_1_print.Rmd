@@ -7,13 +7,11 @@ output:
   html_document:
     keep_md: yes
     code_folding: show
-    css: report.css
+    css: report_print.css
     highlight: textmate
     number_sections: no
     theme: united
-    toc: true
-    toc_depth: 3
-    toc_float: true
+    toc: false
     self_contained: yes
     collapsed: false
     df_print: paged
@@ -37,11 +35,14 @@ options(digits = 3)
 library(tidyverse)
 library(stargazer)
 library(cowplot)
-
+library(kableExtra)
+library(knitr)
+library(formattable)
 #> Set options ----
 
 # disable scientific notation
 options(scipen = 999)
+options(knitr.table.format = "html") 
 
 # FUNCTIONS ====
 source('scripts/ex1hints.R')
@@ -56,9 +57,9 @@ price <- mydata$Sales_USD/mydata$Sales_U  # See `createVariables` function in `e
 ```
 The constructed 'price' varible is the average price of one unit (equivalent units (lbs)) of the item in USD($).
 
-##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region. {.tabset}
+##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region.
 
-###### Hellmans
+#### Hellmans
 ```{r, warning= FALSE}
 df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
   as.data.frame() %>% 
@@ -88,7 +89,7 @@ ggplot(df_hellman, aes(value, fill = region, colour = region)) +
 
 The mean price of Hellman's in the Jewel Region is \$`r mu_hellman$grp_mean[2]` while the mean price of Hellman's in the Central Region is \$`r mu_hellman$grp_mean[1]`. These prices seem comparable. However, after conducting a two-tailed t-test one finds that the means are significantly different at a approximaly a 2% level of significance (p-value =`r t_test_hellman$p.value`).
 
-###### Kraft
+#### Kraft
 ```{r, warning= FALSE}
 df_kraft <- na.omit(cbind(kraft_at_jewel$price, kraft_at_central$price)) %>% 
   as.data.frame() %>% 
@@ -129,9 +130,9 @@ The standard deviation for Hellman's in the Jewel region is noticeably greater t
 
 What does this tell you upfront about your ability to estimate price elasticities?
 
-##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
+##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account.
 
-###### Hellmans
+#### Hellmans
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE}
 hellman_central_sales_plot <- ggplot(hellman_at_central, aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
@@ -172,7 +173,7 @@ hellman_jewel_price_plot <- ggplot(hellman_at_jewel, aes(x=date2)) +
 cowplot::plot_grid(hellman_central_sales_plot, hellman_central_price_plot, hellman_jewel_sales_plot, hellman_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
 ```
 
-###### Kraft
+#### Kraft
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE}
 kraft_central_sales_plot <- ggplot(kraft_at_central, aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
@@ -213,9 +214,9 @@ kraft_jewel_price_plot <- ggplot(kraft_at_jewel, aes(x=date2)) +
 cowplot::plot_grid(kraft_central_sales_plot, kraft_central_price_plot, kraft_jewel_sales_plot, kraft_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
 ```
 
-##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
+##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)?
 
-###### Hellmans
+#### Hellmans
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, , fig.height= 3}
 theme_set(theme_cowplot(font_size=8))
 theme_set(theme_gray()) # reduce default font size
@@ -246,7 +247,7 @@ scatter_hellmans_jewel <- ggplot(hellman_at_jewel, aes(x=sales_u, y=price, color
 cowplot::plot_grid(scatter_hellmans_central, scatter_hellmans_jewel, labels = c("", ""), ncol = 2)
 ```
 
-###### Kraft
+#### Kraft
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, fig.height= 3}
 scatter_kraft_central <- ggplot(kraft_at_central, aes(x=sales_u, y=price, color)) +
   theme_grey() + 
@@ -278,9 +279,9 @@ cowplot::plot_grid(scatter_kraft_central, scatter_kraft_jewel, labels = c("", ""
 
 ## Demand Estimation
 
-##### 1. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's at Jewel (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). {.tabset}
+##### 1. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's at Jewel (i.e. 2 separate regressions, one for Hellman's, and one for Kraft).
 
-###### Hellman at Jewel 
+#### Hellman at Jewel 
 ```{r model_1, echo = TRUE, results = 'asis'}
 model_1 <- runRegression(hellman_at_jewel)
 ```
@@ -295,12 +296,8 @@ stargazer(model_1,
           model.names = TRUE,
           covariate.labels = c("ln(Hellman price)"))
 ```
-<details>
-  <summary>Estimated Equation</summary>
-  $\left.\begin{aligned} \log ( Q ) & = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha & = \log ( A ) \\ \beta & = - \eta \end{aligned} \right.$
-</details>
 
-###### Kraft at Jewel 
+#### Kraft at Jewel 
 ```{r model_2, echo = TRUE, results = 'asis'}
 model_2 <- runRegression(kraft_at_jewel)
 ```
@@ -316,18 +313,15 @@ stargazer(model_2,
           model.names = TRUE,
           covariate.labels = c("ln(Kraft price)"))
 ```
-<details>
-  <summary>Estimated Equation</summary>
-  $\left.\begin{aligned} \log ( Q ) & = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha & = \log ( A ) \\ \beta & = - \eta \end{aligned} \right.$
-</details>
 
-##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). {.tabset}
+##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). 
 
-###### Hellman at Central 
+#### Hellman at Central 
 ```{r regression_3, echo = TRUE, results = 'asis'}
 model_3 <- runRegression(hellman_at_central)
 ```
 ```{r model_3, echo = FALSE, results = 'asis'}
+tidy_model_3 <- broom::tidy(model_3)
 stargazer (model_3,
            title = "Sales of Hellman at Central", 
            dep.var.labels   = 'ln(Hellman Sales)',
@@ -337,12 +331,12 @@ stargazer (model_3,
            covariate.labels = c("ln(Hellman price)"))
 ```
 
-###### Kraft at Central
+#### Kraft at Central
 ```{r regression_4, echo = TRUE, results = 'asis'}
 model_4 <- runRegression(kraft_at_central)
 ```
 ```{r model_4, echo = FALSE, results = 'asis'}
-# x = hellman_at_central
+tidy_model_4 <- broom::tidy(model_4)
 stargazer (model_4,
            title = "Sales of Kraft at Central", 
            dep.var.labels = 'ln(Kraft Sales)',
@@ -354,9 +348,22 @@ stargazer (model_4,
 
 ##### 3. Elasticity differences: Is the demand elasticity higher (in absolute magnitude) at the Jewel account or in the Central Region? Can you offer some compelling explanations for the difference? (think of as many potential reasons as possible) 
 
-##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator). {.tabset}
+```{r, echo=TRUE, warning= FALSE, message=FALSE}
+data.frame(
+  product = c("Hellman at Jewel", "Kraft at Jewel","Hellman at Central","Kraft at Central"),
+  elas = c(abs(tidy_model_1$estimate[2]), abs(tidy_model_2$estimate[2]), abs(tidy_model_3$estimate[2]), abs(tidy_model_4$estimate[2]))) %>% 
+  mutate(elas = formattable::color_bar("lightgrey")(elas)) %>% 
+  rename(`Elasticity (in absolute magnitude)` = elas,
+         `Product and Region` = product)  %>% 
+  kable("html", escape = F) %>%
+  kable_styling("striped", full_width = T) %>%
+  column_spec(1, bold = T) %>% 
+  row_spec(0, bold = T, color = "white", background = "#0399a8")
+```
 
-###### Hellman at Jewel 
+##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator).
+
+#### Hellman at Jewel 
 ```{r change_1, echo = TRUE, results = 'asis', }
 # To get the proportional change in Y associated with a p percent increase in X, calculate
 # a = ([100 + p]/100) and take a^β
@@ -380,7 +387,7 @@ change_hellman <- compute_change(10, price_coeff)
 
 Therefore, a 10% increase in the price of Hellman's at Jewel results in a `r change_hellman$phrase` in unit sales of Hellman's at Jewel ceteris paribus.
 
-###### Kraft at Jewel 
+#### Kraft at Jewel 
 ```{r change_2, echo = TRUE, results = 'asis'}
 # To get the proportional change in Y associated with a p percent increase in X, calculate
 # a = ([100 + p]/100) and take a^β
@@ -390,9 +397,9 @@ change_kraft <- compute_change(10, price_coeff)
 
 Therefore, a 10% increase in the price of Kraft at Jewel results in a `r change_kraft$phrase` in unit sales of Kraft at Jewel ceteris paribus.
 
-##### 5.Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). {.tabset}
+##### 5. Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). 
 
-###### Hellman at Jewel 
+#### Hellman at Jewel 
 ```{r model_5, echo = TRUE, results = 'asis'}
 model_5 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.price)
 # x = kraft_at_jewel
@@ -410,7 +417,7 @@ stargazer(model_5,
           covariate.labels = c("ln(Kraft price)", "ln(Hellman price)"))
 ```
 
-###### Kraft at Jewel 
+#### Kraft at Jewel 
 ```{r model_6, echo = TRUE, results = 'asis'}
 model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)
 # x = hellman_at_jewel

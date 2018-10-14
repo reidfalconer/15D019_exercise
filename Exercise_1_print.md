@@ -7,13 +7,11 @@ output:
   html_document:
     keep_md: yes
     code_folding: show
-    css: report.css
+    css: report_print.css
     highlight: textmate
     number_sections: no
     theme: united
-    toc: true
-    toc_depth: 3
-    toc_float: true
+    toc: false
     self_contained: yes
     collapsed: false
     df_print: paged
@@ -40,9 +38,9 @@ price <- mydata$Sales_USD/mydata$Sales_U  # See `createVariables` function in `e
 ```
 The constructed 'price' varible is the average price of one unit (equivalent units (lbs)) of the item in USD($).
 
-##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region. {.tabset}
+##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region.
 
-###### Hellmans
+#### Hellmans
 
 ```r
 df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
@@ -56,11 +54,11 @@ mu_hellman <- df_hellman %>% group_by(region) %>% summarize(grp_mean = mean(valu
 t_test_hellman <- t.test(value ~ region, data = df_hellman)
 ```
 
-<img src="Exercise_1_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
 The mean price of Hellman's in the Jewel Region is \$1.114 while the mean price of Hellman's in the Central Region is \$1.095. These prices seem comparable. However, after conducting a two-tailed t-test one finds that the means are significantly different at a approximaly a 2% level of significance (p-value =0.017).
 
-###### Kraft
+#### Kraft
 
 ```r
 df_kraft <- na.omit(cbind(kraft_at_jewel$price, kraft_at_central$price)) %>% 
@@ -74,7 +72,7 @@ mu_kraft <- df_kraft %>% group_by(region) %>% summarize(grp_mean = mean(value))
 t_test_kraft <- t.test(value ~ region, data = df_kraft)
 ```
 
-<img src="Exercise_1_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 The mean price of Kraft in the Jewel Region is \$1.095 while the mean price of Kraft in the Central Region is \$1.099. These prices are comparable and after conducting a two-tailed t-test one finds that the means are not significantly different from one another (p-value =0.017).
 
@@ -90,27 +88,27 @@ The standard deviation for Hellman's in the Jewel region is noticeably greater t
 
 What does this tell you upfront about your ability to estimate price elasticities?
 
-##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
+##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account.
 
-###### Hellmans
-<img src="Exercise_1_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
+#### Hellmans
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
-###### Kraft
-<img src="Exercise_1_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
+#### Kraft
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
-##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
+##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)?
 
-###### Hellmans
-<img src="Exercise_1_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+#### Hellmans
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
-###### Kraft
-<img src="Exercise_1_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+#### Kraft
+<img src="Exercise_1_print_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 ## Demand Estimation
 
-##### 1. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's at Jewel (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). {.tabset}
+##### 1. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's at Jewel (i.e. 2 separate regressions, one for Hellman's, and one for Kraft).
 
-###### Hellman at Jewel 
+#### Hellman at Jewel 
 
 ```r
 model_1 <- runRegression(hellman_at_jewel)
@@ -132,12 +130,8 @@ model_1 <- runRegression(hellman_at_jewel)
 <tr><td style="text-align:left">F Statistic</td><td>115.000<sup>***</sup> (df = 1; 86)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
-<details>
-  <summary>Estimated Equation</summary>
-  $\left.\begin{aligned} \log ( Q ) & = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha & = \log ( A ) \\ \beta & = - \eta \end{aligned} \right.$
-</details>
 
-###### Kraft at Jewel 
+#### Kraft at Jewel 
 
 ```r
 model_2 <- runRegression(kraft_at_jewel)
@@ -160,14 +154,10 @@ model_2 <- runRegression(kraft_at_jewel)
 <tr><td style="text-align:left">F Statistic</td><td>270.000<sup>***</sup> (df = 1; 86)</td></tr>
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
-<details>
-  <summary>Estimated Equation</summary>
-  $\left.\begin{aligned} \log ( Q ) & = \alpha + \beta \log ( P ) + \epsilon , \text { where } \\ \alpha & = \log ( A ) \\ \beta & = - \eta \end{aligned} \right.$
-</details>
 
-##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). {.tabset}
+##### 2. Fit the "multiplicative" demand model discussed in class for Kraft and Hellman's for the Central Region (i.e. 2 separate regressions, one for Hellman's, and one for Kraft). 
 
-###### Hellman at Central 
+#### Hellman at Central 
 
 ```r
 model_3 <- runRegression(hellman_at_central)
@@ -190,7 +180,7 @@ model_3 <- runRegression(hellman_at_central)
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
 
-###### Kraft at Central
+#### Kraft at Central
 
 ```r
 model_4 <- runRegression(kraft_at_central)
@@ -215,9 +205,50 @@ model_4 <- runRegression(kraft_at_central)
 
 ##### 3. Elasticity differences: Is the demand elasticity higher (in absolute magnitude) at the Jewel account or in the Central Region? Can you offer some compelling explanations for the difference? (think of as many potential reasons as possible) 
 
-##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator). {.tabset}
 
-###### Hellman at Jewel 
+```r
+data.frame(
+  product = c("Hellman at Jewel", "Kraft at Jewel","Hellman at Central","Kraft at Central"),
+  elas = c(abs(tidy_model_1$estimate[2]), abs(tidy_model_2$estimate[2]), abs(tidy_model_3$estimate[2]), abs(tidy_model_4$estimate[2]))) %>% 
+  mutate(elas = formattable::color_bar("lightgrey")(elas)) %>% 
+  rename(`Elasticity (in absolute magnitude)` = elas,
+         `Product and Region` = product)  %>% 
+  kable("html", escape = F) %>%
+  kable_styling("striped", full_width = T) %>%
+  column_spec(1, bold = T) %>% 
+  row_spec(0, bold = T, color = "white", background = "#0399a8")
+```
+
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;font-weight: bold;color: white;background-color: #0399a8;"> Product and Region </th>
+   <th style="text-align:left;font-weight: bold;color: white;background-color: #0399a8;"> Elasticity (in absolute magnitude) </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Hellman at Jewel </td>
+   <td style="text-align:left;"> <span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgrey; width: 100.00%">4.58</span> </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Kraft at Jewel </td>
+   <td style="text-align:left;"> <span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgrey; width: 90.92%">4.17</span> </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Hellman at Central </td>
+   <td style="text-align:left;"> <span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgrey; width: 51.85%">2.38</span> </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;font-weight: bold;"> Kraft at Central </td>
+   <td style="text-align:left;"> <span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgrey; width: 45.94%">2.11</span> </td>
+  </tr>
+</tbody>
+</table>
+
+##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator).
+
+#### Hellman at Jewel 
 
 ```r
 # To get the proportional change in Y associated with a p percent increase in X, calculate
@@ -242,7 +273,7 @@ change_hellman <- compute_change(10, price_coeff)
 
 Therefore, a 10% increase in the price of Hellman's at Jewel results in a 35.39% decrease in unit sales of Hellman's at Jewel ceteris paribus.
 
-###### Kraft at Jewel 
+#### Kraft at Jewel 
 
 ```r
 # To get the proportional change in Y associated with a p percent increase in X, calculate
@@ -253,9 +284,9 @@ change_kraft <- compute_change(10, price_coeff)
 
 Therefore, a 10% increase in the price of Kraft at Jewel results in a 32.78% decrease in unit sales of Kraft at Jewel ceteris paribus.
 
-##### 5.Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). {.tabset}
+##### 5. Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). 
 
-###### Hellman at Jewel 
+#### Hellman at Jewel 
 
 ```r
 model_5 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.price)
@@ -283,7 +314,7 @@ model_5 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = hellman.jewel_kraft.p
 <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
 </table>
 
-###### Kraft at Jewel 
+#### Kraft at Jewel 
 
 ```r
 model_6 <- lm(ln_sales_u ~ ln_price.x + ln_price.y, data = kraft.jewel_hellman.price)

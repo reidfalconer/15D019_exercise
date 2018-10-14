@@ -22,7 +22,7 @@ getdata <- function(file){
     mydata$date1 <- substr(mydata$date, start = 1, stop = 7)
     
     # now we can convert it to the Date class, but first setting the locale
-    # lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
+    lct <- Sys.getlocale("LC_TIME"); Sys.setlocale("LC_TIME", "C")
 
     mydata$date2 <- as.Date(mydata$date1, "%b%d%y")
    # mydata$date2 <- ts(mydata$date2)
@@ -38,8 +38,7 @@ createVariables <- function(mydata) {
     ln_sales_u <- log(mydata$Sales_U) #first 16 values are nonsensical
     ln_price <- log(price)#first 16 values are nonsensical
     
-    df <- data.frame(price = price, sales_u = sales_u, ln_sales_u = ln_sales_u, ln_price = ln_price, date2 = mydata$date2) %>% 
-        na.omit()
+    df <- data.frame(price = price, sales_u = sales_u, ln_sales_u = ln_sales_u, ln_price = ln_price, date2 = mydata$date2) 
 }
 
 runRegression <- function(vars.df) {
