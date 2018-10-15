@@ -1601,7 +1601,7 @@ h6 {
 --BLUE: #056EEE;
 --BLACK: #333333;
 --WHITE: #FEFEFE;
---GRAY: #828282;
+--GRAY: #e8e8e8;
 --PINK: #CA0147;
 --YELLOW: #F9BC08;
 --LEAPLY: #bd3d11;
@@ -1675,12 +1675,16 @@ color: var(--TT_BLUE);
 
 .summary {
 padding-left: 20px;
+padding-right: 20px;
+padding-top: 5px;
+padding-bottom: 20px;
 border-left: solid 5px var(--TT_BLUE);
 box-sizing: border-box;
 box-sizing: border-box;
 -moz-box-sizing: border-box;
 margin-left: 5px;
 -webkit-box-sizing: border-box;
+background-color: var(--GRAY);
 }
 
 .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
@@ -1838,7 +1842,9 @@ $(document).ready(function () {
 <h3>
 Summary
 </h3>
-<p>In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).</p>
+<ul>
+<li>In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).</li>
+</ul>
 </div>
 <div id="data-check" class="section level2">
 <h2>Data Check</h2>

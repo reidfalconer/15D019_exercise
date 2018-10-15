@@ -7,7 +7,7 @@ Author: Reid Falconer
     --BLUE:    	#056EEE;
     --BLACK:   	#333333;
     --WHITE:   	#FEFEFE;
-    --GRAY:    	#828282;
+    --GRAY:    	#e8e8e8;
     --PINK:    	#CA0147;
     --YELLOW:  	#F9BC08;
     --LEAPLY:   #bd3d11;
@@ -94,12 +94,16 @@ a {
 /* CUSTOM */
 .summary {
   padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 20px;
   border-left: solid 5px var(--TT_BLUE);
   box-sizing: border-box;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   margin-left: 5px;
   -webkit-box-sizing: border-box;
+  background-color: var(--GRAY);
 }
 
 /* Floating TOC */

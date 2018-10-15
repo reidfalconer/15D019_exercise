@@ -15,7 +15,7 @@ output:
     self_contained: yes
     collapsed: false
     df_print: paged
-    urlcolor: blue
+   # urlcolor: blue
 ---
 
 <div id="logo-container">
@@ -32,7 +32,7 @@ output:
 <h3>
 Summary
 </h3>
-In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).
+- In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).
 </div>
 
 
