@@ -15,7 +15,7 @@ output:
     self_contained: yes
     collapsed: false
     df_print: paged
-   # urlcolor: blue
+    urlcolor: blue
 ---
 
 <div id="logo-container">
@@ -412,13 +412,13 @@ compute_change <- function(percent_change, price_coeff) {
   a <- ((100 + percent_change)/100)
   price_effect <- a^price_coeff
   if (price_effect < 1) {
-  prop <- round((1-price_effect)*100, digits = 2)
+  prop <- (1-price_effect)*100
   direction <- "% decrease"
   }  else {
-  prop <- round((price_effect - 1)*100, digits = 2)
+  prop <- (price_effect - 1)*100
   direction <- "% increase"
   }
-  return(list(phrase = (paste0(prop, direction)), numeric = prop))
+  return(list(phrase = (paste0(round(prop, digits = 2), direction)), numeric = prop))
 }
 
 change_hellman <- compute_change(10, price_coeff)
@@ -493,18 +493,15 @@ hellman_coeff <- tidy_model_6$estimate[2]
 kraft_coeff <- tidy_model_6$estimate[3]
 
 # Hellman’s price is cut by 10% at Jewel
-change <- compute_change(-100., hellman_coeff)
+change <- compute_change(-10, hellman_coeff)
 
 # A function to aid with solving
-f <- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - change$numeric)
+f <- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - ((100/(100-change$numeric))-1)*100
+                   )
 percent <- uniroot(f, lower=0, upper=100)$root
 ```
 
 Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by `r percent`% to obtain the same sales that we currently enjoy.
-
-
-
-
 
 
 

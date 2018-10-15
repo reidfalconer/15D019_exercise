@@ -2517,13 +2517,13 @@ compute_change &lt;- function(percent_change, price_coeff) {
   a &lt;- ((100 + percent_change)/100)
   price_effect &lt;- a^price_coeff
   if (price_effect &lt; 1) {
-  prop &lt;- round((1-price_effect)*100, digits = 2)
+  prop &lt;- (1-price_effect)*100
   direction &lt;- &quot;% decrease&quot;
   }  else {
-  prop &lt;- round((price_effect - 1)*100, digits = 2)
+  prop &lt;- (price_effect - 1)*100
   direction &lt;- &quot;% increase&quot;
   }
-  return(list(phrase = (paste0(prop, direction)), numeric = prop))
+  return(list(phrase = (paste0(round(prop, digits = 2), direction)), numeric = prop))
 }
 
 change_hellman &lt;- compute_change(10, price_coeff)</code></pre>
@@ -2861,12 +2861,13 @@ F Statistic
 kraft_coeff &lt;- tidy_model_6$estimate[3]
 
 # Hellman’s price is cut by 10% at Jewel
-change &lt;- compute_change(-100., hellman_coeff)
+change &lt;- compute_change(-10, hellman_coeff)
 
 # A function to aid with solving
-f &lt;- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - change$numeric)
+f &lt;- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - ((100/(100-change$numeric))-1)*100
+                   )
 percent &lt;- uniroot(f, lower=0, upper=100)$root</code></pre>
-<p>Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by 14.457% to obtain the same sales that we currently enjoy.</p>
+<p>Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by 4.345% to obtain the same sales that we currently enjoy.</p>
 </div>
 </div>
 </div>
