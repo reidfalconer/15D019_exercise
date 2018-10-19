@@ -2,7 +2,7 @@
 title: "Exercise 1: Basic Demand Estimation Exercise" 
 #subtitle:
 author: "Reid Falconer"
-date: "2018-10-15"
+date: "2018-10-19"
 output:
   html_document:
     keep_md: yes
