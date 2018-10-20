@@ -11,7 +11,9 @@ output:
     highlight: textmate
     number_sections: no
     theme: united
-    toc: false
+    toc: true
+    toc_depth: 3
+    toc_float: true
     self_contained: yes
     collapsed: false
     df_print: paged
@@ -22,7 +24,9 @@ output:
 <img src="images/image.jpg" class="logo"/>
 </div>
 <style>
-.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+.list-group-item.active, 
+.list-group-item.active:focus, 
+.list-group-item.active:hover {
     background-color: #0399a8;
 }
 </style>
