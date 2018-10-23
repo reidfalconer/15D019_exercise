@@ -2,7 +2,7 @@
 title: "Exercise 1: Basic Demand Estimation Exercise" 
 #subtitle:
 author: "Reid Falconer"
-date: "2018-10-14"
+date: "2018-10-23"
 output:
   html_document:
     keep_md: yes
@@ -42,7 +42,7 @@ The constructed 'price' varible is the average price of one unit (equivalent uni
 
 ##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region. {.tabset}
 
-###### Hellmans
+###### Hellman's
 
 ```r
 df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
@@ -90,17 +90,17 @@ The standard deviation for Hellman's in the Jewel region is noticeably greater t
 
 What does this tell you upfront about your ability to estimate price elasticities?
 
-##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
+##### 4. Price plots: Construct time-series plots of sales and prices for Hellman's in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
 
-###### Hellmans
+###### Hellman's
 <img src="Exercise_1_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
 
 ###### Kraft
 <img src="Exercise_1_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
 
-##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
+##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellman's in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
 
-###### Hellmans
+###### Hellman's
 <img src="Exercise_1_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
 ###### Kraft

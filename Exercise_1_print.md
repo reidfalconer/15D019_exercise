@@ -37,7 +37,18 @@ output:
 Summary
 </h3>
 - In this exercise we will go through the standard steps that one needs to undertake in conducting a basic demand analysis. For this purpose, we will use scanner data obtained from Kraft. Kraft uses Nielsen as its scanner data vendor in all product categories. In this exercise, we use a small subset of all possible product/geography/ variable combinations available in this sort of data. We will explore store level-scanner data at the account level (Jewel), and at a higher of aggregation (Central Region).
-</div>
+
+- Category: Category: Viscous salad dressings (Mayonnaise/Miracle Whip/other "spreadables")
+- Sub-categories: Mayonnaise, Miracle Whip
+- Product aggregates: 
+  - Kraft Mayo 32oz
+  - Hellman's Mayo 32oz
+- Geographical aggregates:
+  - Kraft Midwest Region (called "Central Region")
+  - Chicago Market: Jewel-Osco
+- Time aggregation/periods:
+  - Weekly data 91/92
+</div> 
 
 
 ## Data Check
@@ -52,7 +63,7 @@ The 'price' variable is an average variable that is constructed by dividing the 
 
 ##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region. {.tabset}
 
-###### Hellmans
+###### Hellman's
 
 ```r
 df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
@@ -110,27 +121,27 @@ sd_hellman <- df_hellman %>% group_by(region) %>% summarize(grp_sd = sd(value))
 sd_kraft <- df_kraft %>% group_by(region) %>% summarize(grp_sd = sd(value))
 ```
 
-The standard deviation for Hellman's in Jewel is noticeably greater than in the Central region. (0.067 vs 0.033 standard deviation respectively). Similarly, the standard deviation for Kraft in Jewel is significantly larger than in the Central region. (0.112 and 0.053 standard deviation respectively). Generally speaking, more variation means more 'information' and thus a more reliable estimate. However, in this case, the larger amount of variation in Jewel may hinder our ability to accurately estimate price elasticities with the account level data.
+The standard deviation for Hellman's in Jewel is noticeably greater than in the Central region. (0.067 vs 0.033 standard deviation respectively). Similarly, the standard deviation for Kraft in Jewel is significantly larger than in the Central region. (0.112 and 0.053 standard deviation respectively). Generally speaking, more variation means more 'information', and thus the larger amount of variation in Jewel should improve our ability to accurately estimate the price elasticities with the account level data compared to the Central region data. Additionally, one can attribute the lower variation found in the Central region to the data creation process, as aggregation over values usually results in lower variability. 
 
 ##### 4. Price plots: Construct time-series plots of sales and prices for Hellman's in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
 
-###### Hellmans
+###### Hellman's
 <img src="Exercise_1_print_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" />
-Hellmans pricing policies in the Central division and for Jewel appear to follow a similar pattern (comparisons can effectively be made by viewing the dashed lines which highlight the price time-series plots in the 'other' division). One notable difference (that was statistically identified in the question above) is that Hellmans pricing policy seems to be  more variable in Jewel (with higher peaks and lower troughs). The sales plots are harder to draw inference from but a clear inverse relationsip between sales and prices can be seen. 
+Hellman's pricing policies in the Central Region and for Jewel appear to follow a similar pattern over time (comparisons can effectively be made by viewing the dashed lines which highlight the price time-series plots in the 'other' Region). One notable difference (that was statistically identified in the question above) is that Hellman's pricing policy seems to be more variable in Jewel (with higher peaks and lower troughs). The sales plots are harder to draw inference from but a clear inverse relationsip between sales and prices can be seen. 
 
 
 ###### Kraft
 <img src="Exercise_1_print_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" />
-Kraft's pricing policies also follow a similar pattern in both the Central division and Jewel. Similar to Hellmans, Kraft's pricing policy is shown to have more variation in Jewel than in the Central division (with higher peaks and lower troughs). Once again, the sales plots are tricky to compare (given the difference in scales) but an inverse relationship between sales and prices is clearly prevalent.
+Kraft's pricing policies also follow a similar pattern over time in both the Central Region and Jewel. Similar to Hellman's, Kraft's pricing policy is shown to have more variation in Jewel than in the Central Region (with higher peaks and lower troughs). Once again, the sales plots are tricky to compare (given the difference in scales) but an inverse relationship between sales and prices is clearly prevalent.
 
 ###### Price Plots
 <img src="Exercise_1_print_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
 
-The above plot illustrates the time-series plots of prices for both Kraft and Hellman's in the Central division and Jewel. This highlights how all the pricing policy varies consistently and move together and shows the more substantial variations found in Jewel for both Kraft and Hellman's. In a more in-depth analysis, it would be useful to plot the percentage change in sales and prices over time as these would be more comparable and add some valuable insights.
+The above plot illustrates the time-series plots of prices for both Kraft and Hellman's in the Central Region and Jewel. This highlights how all the pricing policies vary consistently and move together over time. Furthermoe, the plot highlights the more substantial variations found in Jewel for both Kraft and Hellman's. In a more in-depth analysis, it would be useful to plot the percentage change in sales and prices over time as these would be more comparable and add some valuable insights.
 
-##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
+##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellman's in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
 
-###### Hellmans
+###### Hellman's
 <img src="Exercise_1_print_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 Looking at the two plots above there is evidence for a negatively sloped demand-curve in the data for Hellman's in both the Central Region and at Jewel. Eye-balling these plots, demand appears to be more elastic at Jewel where a percentage change in price will seem to produce a greater percentage change in quantity demanded.
@@ -284,10 +295,17 @@ data.frame(
 </tbody>
 </table>
 
-The demand elasticity is higher (in absolute magnitude) at the Jewel account for both Hellman's and Kraft. While the demand is normally anticipated to be elastic at the brand level, these differences in the elasticity of demand can be possibly be explained by a number of factors. 
+The demand elasticity is higher (in absolute magnitude) at the Jewel account for both Hellman's and Kraft than in the Central Region. While demand is normally anticipated to be elastic at the brand level, these differences in the elasticity of demand can be possibly be explained by a number of factors. 
 
-the fact that
-mayonnaise occupies a relatively small share in consumer’s budget.
+- Availability of Substitutes 
+  - The more substitutes available to a customer, the more elastic a product's demand. Therefore, it may be the case that there are more viscous salad dressing (Mayonnaise/Miracle Whip/other "spreadables") substitutes available at the Jewel account than in the Central Region.
+  - The Jewel account may also have more shops in close proximity making it easier for consumers to switch than it is in the Central Region. 
+
+- Consumer Preferences
+  - It is conceivable to believe that consumers in the Central Region have stronger salad dressing preferences than those at the Jewel account and are thus more likely to pay what is asked to get what they want, making the demand elasticity less elastic in the Central Region compared to the Jewel account.
+  
+- Consumer Income: 
+  - The income of the consumer also affects the elasticity of demand. It is possible that consumers in the Central Region are from higher-income groups than those at the Jewel account. Therefore, the demand in the Central Region will be less elastic as the rise or fall in the price will not have as much effect on the demand for the product (salad dressing).
 
 ##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator). {.tabset}
 

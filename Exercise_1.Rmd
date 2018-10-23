@@ -58,7 +58,7 @@ The constructed 'price' varible is the average price of one unit (equivalent uni
 
 ##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region. {.tabset}
 
-###### Hellmans
+###### Hellman's
 ```{r, warning= FALSE}
 df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
   as.data.frame() %>% 
@@ -76,12 +76,12 @@ ggplot(df_hellman, aes(value, fill = region, colour = region)) +
   geom_density(alpha = 0.1, show.legend = TRUE ) +
   xlab("Price") +
   ylab("Density") +
-  labs(title="Kernel Density Plots of Hellmans Prices in Jewel and the Central Region", 
+  labs(title="Kernel Density Plots of Hellman's Prices in Jewel and the Central Region", 
        caption="Source: Own Compilation") +  
   # Add mean lines and color by price
   geom_vline(data = mu_hellman, aes(xintercept = grp_mean, color = region), linetype = "dashed") +
-  scale_fill_discrete(name='Price',labels=c("Hellmans in Jewel", "Hellmans in Central Region")) +
-  scale_color_discrete(name='Price',labels=c("Hellmans in Jewel", "Hellmans in Central Region")) +
+  scale_fill_discrete(name='Price',labels=c("Hellman's in Jewel", "Hellman's in Central Region")) +
+  scale_color_discrete(name='Price',labels=c("Hellman's in Jewel", "Hellman's in Central Region")) +
   theme_grey() + 
   theme(text = element_text(size=8))
 ```
@@ -129,16 +129,16 @@ The standard deviation for Hellman's in the Jewel region is noticeably greater t
 
 What does this tell you upfront about your ability to estimate price elasticities?
 
-##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
+##### 4. Price plots: Construct time-series plots of sales and prices for Hellman's in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
 
-###### Hellmans
+###### Hellman's
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE}
 hellman_central_sales_plot <- ggplot(hellman_at_central, aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
-  labs(title="Sales for Hellmans in the Central Region",
+  labs(title="Sales for Hellman's in the Central Region",
   y="Sales", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Sales"="turquoise4"))  # line color
 
@@ -147,7 +147,7 @@ hellman_central_price_plot <- ggplot(hellman_at_central, aes(x=date2)) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
-  labs(title="Prices for Hellmans in the Central Region", 
+  labs(title="Prices for Hellman's in the Central Region", 
   y="Price", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Price"="coral"))  # line color
 
@@ -156,7 +156,7 @@ hellman_jewel_sales_plot <- ggplot(hellman_at_jewel, aes(x=date2)) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
-  labs(title="Sales for Hellmans in Jewel",
+  labs(title="Sales for Hellman's in Jewel",
   y="Sales", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Sales"="turquoise4"))  # line color
 
@@ -165,7 +165,7 @@ hellman_jewel_price_plot <- ggplot(hellman_at_jewel, aes(x=date2)) +
   theme_grey() + 
   theme(text = element_text(size=8)) +
   theme(legend.position="none") +
-  labs(title="Prices for Hellmans in Jewel", 
+  labs(title="Prices for Hellman's in Jewel", 
   y="Price", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Price"="coral"))  # line color
 
@@ -213,9 +213,9 @@ kraft_jewel_price_plot <- ggplot(kraft_at_jewel, aes(x=date2)) +
 cowplot::plot_grid(kraft_central_sales_plot, kraft_central_price_plot, kraft_jewel_sales_plot, kraft_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
 ```
 
-##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
+##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellman's in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
 
-###### Hellmans
+###### Hellman's
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, , fig.height= 3}
 theme_set(theme_cowplot(font_size=8))
 theme_set(theme_gray()) # reduce default font size
@@ -228,7 +228,7 @@ scatter_hellmans_central <- ggplot(hellman_at_central, aes(x=sales_u, y=price, c
               alpha = 0.2) +
   geom_point(color = "#00AFBB", size = 0.5) +
   labs(title="Scatter-plot of sales versus prices",
-       subtitle = "for Hellmans in the Central Region",
+       subtitle = "for Hellman's in the Central Region",
   y="Price", x = "Sales") 
 
 scatter_hellmans_jewel <- ggplot(hellman_at_jewel, aes(x=sales_u, y=price, color)) +
@@ -240,7 +240,7 @@ scatter_hellmans_jewel <- ggplot(hellman_at_jewel, aes(x=sales_u, y=price, color
               alpha = 0.2) +
   geom_point(color = "#e86730", size = 0.5) +
   labs(title="Scatter-plot of sales versus prices",
-        subtitle = "for Hellmans in Jewel", 
+        subtitle = "for Hellman's in Jewel", 
   y="Price", x = "Sales") 
 
 cowplot::plot_grid(scatter_hellmans_central, scatter_hellmans_jewel, labels = c("", ""), ncol = 2)
