@@ -6,7 +6,7 @@ date: "`r Sys.Date()`"
 output:
   html_document:
     keep_md: yes
-    code_folding: show
+    code_folding: hide
     css: report_print.css
     highlight: textmate
     number_sections: no
@@ -67,11 +67,11 @@ Summary
 ```{r,eval=FALSE, warning= FALSE}
 price <- mydata$Sales_USD/mydata$Sales_U  # See `createVariables` function in `ex1hints.R`. 
 ```
-The constructed 'price' varible is the average price of one unit (equivalent units (lbs)) of the item in USD($).
+The 'price' variable is an average variable that is constructed by dividing the total weekly value (in US Dollars) of sales by the total weekly amount of sales (in equivalent units (lbs)).  Therefore the 'price' variable is a weekly time-series of the average price of one unit (in equivalent units (lbs)) of the item (Kraft and Hellman's Mayo in this example) in USD($).
 
-##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region.
+##### 2. Compute the mean prices across weeks of Hellman's in Jewel and the Central Region. Are they comparable? Repeat the exercise for Kraft in Jewel and the Central Region. {.tabset}
 
-#### Hellmans
+###### Hellmans
 ```{r, warning= FALSE}
 df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
   as.data.frame() %>% 
@@ -82,6 +82,13 @@ df_hellman <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %
 mu_hellman <- df_hellman %>% group_by(region) %>% summarize(grp_mean = mean(value))
 
 t_test_hellman <- t.test(value ~ region, data = df_hellman)
+
+df_hellman_ks <- na.omit(cbind(hellman_at_jewel$price, hellman_at_central$price)) %>% 
+  as.data.frame() %>% 
+  rename(hellman_at_jewel_price = V1,
+         hellman_at_central_price = V2)
+
+ks_hellman <- ks.test(df_hellman_ks$hellman_at_jewel_price,df_hellman_ks$hellman_at_central_price)
 ```
 
 ```{r, echo = FALSE, dpi=300, warning= FALSE, fig.align='center', fig.height= 3}
@@ -99,9 +106,9 @@ ggplot(df_hellman, aes(value, fill = region, colour = region)) +
   theme(text = element_text(size=8))
 ```
 
-The mean price of Hellman's in the Jewel Region is \$`r mu_hellman$grp_mean[2]` while the mean price of Hellman's in the Central Region is \$`r mu_hellman$grp_mean[1]`. These prices seem comparable. However, after conducting a two-tailed t-test one finds that the means are significantly different at a approximaly a 2% level of significance (p-value =`r t_test_hellman$p.value`).
+The mean price of Hellman's in Jewel is \$`r mu_hellman$grp_mean[2]` while the mean price of Hellman's in the Central Region is \$`r mu_hellman$grp_mean[1]`. These prices seem comparable. However, after conducting a Kolmogorov–Smirnov test one can reject the null hypothesis that the samples are drawn from the same distribution at the 1% level of significance (p-value = `r ks_hellman$p.value`). Furthermore, a two-tailed t-test highlights that the means are significantly different at approximately a 2% level of significance (p-value =`r t_test_hellman$p.value`).
 
-#### Kraft
+###### Kraft
 ```{r, warning= FALSE}
 df_kraft <- na.omit(cbind(kraft_at_jewel$price, kraft_at_central$price)) %>% 
   as.data.frame() %>% 
@@ -112,6 +119,13 @@ df_kraft <- na.omit(cbind(kraft_at_jewel$price, kraft_at_central$price)) %>%
 mu_kraft <- df_kraft %>% group_by(region) %>% summarize(grp_mean = mean(value))
 
 t_test_kraft <- t.test(value ~ region, data = df_kraft)
+
+df_kraft_ks <- na.omit(cbind(kraft_at_jewel$price, kraft_at_central$price)) %>% 
+  as.data.frame() %>% 
+  rename(kraft_at_jewel_price = V1,
+         kraft_at_central_price = V2) 
+
+ks_kraft <- ks.test(df_kraft_ks$kraft_at_jewel_price,df_kraft_ks$kraft_at_central_price)
 ```
 
 ```{r, echo = FALSE, dpi=300, warning= FALSE, fig.align='center', fig.height= 3}
@@ -129,7 +143,7 @@ ggplot(df_kraft, aes(value, fill = region, colour = region)) +
   theme(text = element_text(size=8))
 ```
 
-The mean price of Kraft in the Jewel Region is \$`r mu_kraft$grp_mean[2]` while the mean price of Kraft in the Central Region is \$`r mu_kraft$grp_mean[1]`. These prices are comparable and after conducting a two-tailed t-test one finds that the means are not significantly different from one another (p-value =`r t_test_hellman$p.value`).
+The mean price of Kraft in the Jewel Region is \$`r mu_kraft$grp_mean[2]` while the mean price of Kraft in the Central Region is \$`r mu_kraft$grp_mean[1]`. These prices are comparable since after conducting a two-tailed t-test one finds that the means are not significantly different from one another (p-value =`r t_test_hellman$p.value`). However, a Kolmogorov–Smirnov rejects the null hypothesis that the samples are drawn from the same distribution at the 1% level of significance (p-value = `r ks_kraft$p.value`).
 
 ##### 3. Price variation: Compute the standard deviation of prices across weeks of Hellman's in Jewel and the Central Region. Is there more price variation at Jewel or in the Central Region? Why? What does this tell you upfront about your ability to estimate price elasticities with either account level data or data in a large geographic market? Repeat the exercise for Kraft in Jewel and the Central Region. 
 
@@ -138,13 +152,11 @@ sd_hellman <- df_hellman %>% group_by(region) %>% summarize(grp_sd = sd(value))
 sd_kraft <- df_kraft %>% group_by(region) %>% summarize(grp_sd = sd(value))
 ```
 
-The standard deviation for Hellman's in the Jewel region is noticeably greater than in the Central region. (`r sd_hellman$grp_sd[2]` vs `r sd_hellman$grp_sd[1]` standard deviation respectivly). Similarily, the standard deviation for Kraft in the Jewel region is significantly larger than in the Central region. (`r sd_kraft$grp_sd[2]` and `r sd_kraft$grp_sd[1]` standard deviation respectivly)
+The standard deviation for Hellman's in Jewel is noticeably greater than in the Central region. (`r sd_hellman$grp_sd[2]` vs `r sd_hellman$grp_sd[1]` standard deviation respectively). Similarly, the standard deviation for Kraft in Jewel is significantly larger than in the Central region. (`r sd_kraft$grp_sd[2]` and `r sd_kraft$grp_sd[1]` standard deviation respectively). Generally speaking, more variation means more 'information' and thus a more reliable estimate. However, in this case, the larger amount of variation in Jewel may hinder our ability to accurately estimate price elasticities with the account level data.
 
-What does this tell you upfront about your ability to estimate price elasticities?
+##### 4. Price plots: Construct time-series plots of sales and prices for Hellman's in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account. {.tabset}
 
-##### 4. Price plots: Construct time-series plots of sales and prices for Hellmans in the Central division and for Jewel (i.e. weeks on the X-axis, prices and unit-sales on the Y-axis). Repeat the exercise for Kraft. Describe the differences or similarities between Kraft and Hellman's pricing policies in each account.
-
-#### Hellmans
+###### Hellmans
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE}
 hellman_central_sales_plot <- ggplot(hellman_at_central, aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
@@ -188,8 +200,10 @@ hellman_jewel_price_plot <- ggplot(na.omit(hellman_at_jewel), aes(x=date2)) +
 
 cowplot::plot_grid(hellman_central_sales_plot, hellman_central_price_plot, hellman_jewel_sales_plot, hellman_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
 ```
+Hellmans pricing policies in the Central division and for Jewel appear to follow a similar pattern (comparisons can effectively be made by viewing the dashed lines which highlight the price time-series plots in the 'other' division). One notable difference (that was statistically identified in the question above) is that Hellmans pricing policy seems to be  more variable in Jewel (with higher peaks and lower troughs). The sales plots are harder to draw inference from but a clear inverse relationsip between sales and prices can be seen. 
 
-#### Kraft
+
+###### Kraft
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE}
 kraft_central_sales_plot <- ggplot(kraft_at_central, aes(x=date2)) + 
   geom_line(aes(y=sales_u, col="Sales")) + 
@@ -231,6 +245,12 @@ kraft_jewel_price_plot <- ggplot(na.omit(kraft_at_jewel), aes(x=date2)) +
   y="Price", x = "Date") +  # title and caption
   scale_color_manual(name="", values = c("Price"="coral")) # line color
 
+cowplot::plot_grid(kraft_central_sales_plot, kraft_central_price_plot, kraft_jewel_sales_plot, kraft_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
+```
+Kraft's pricing policies also follow a similar pattern in both the Central division and Jewel. Similar to Hellmans, Kraft's pricing policy is shown to have more variation in Jewel than in the Central division (with higher peaks and lower troughs). Once again, the sales plots are tricky to compare (given the difference in scales) but an inverse relationship between sales and prices is clearly prevalent.
+
+###### Price Plots
+```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, fig.height= 3}
 price_plots <- ggplot(kraft_at_jewel, aes(x=date2)) + 
   geom_line(aes(y=price, colour = "#0399a8")) +
   geom_line(data =na.omit(kraft_at_central), aes(y=price, colour = "coral")) +
@@ -244,18 +264,14 @@ price_plots <- ggplot(kraft_at_jewel, aes(x=date2)) +
   scale_fill_discrete(name='Price',labels=c("Kraft in Jewel", "Hellman in Central Region", "Hellman in Jewel",  "Kraft in Central Region")) +
   scale_color_discrete(name='Price',labels=c("Kraft in Jewel", "Hellman in Central Region", "Hellman in Jewel",  "Kraft in Central Region")) # line color
 
-
-cowplot::plot_grid(kraft_central_sales_plot, kraft_central_price_plot, kraft_jewel_sales_plot, kraft_jewel_price_plot, labels = c("A", "B","C","D"), ncol = 2)
-```
-
-
-```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, fig.height= 3}
 price_plots 
 ```
 
-##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)?
+The above plot illustrates the time-series plots of prices for both Kraft and Hellman's in the Central division and Jewel. This highlights how all the pricing policy varies consistently and move together and shows the more substantial variations found in Jewel for both Kraft and Hellman's. In a more in-depth analysis, it would be useful to plot the percentage change in sales and prices over time as these would be more comparable and add some valuable insights.
 
-#### Hellmans
+##### 5. Scatter-plots: Construct scatter-plots of sales versus prices for Hellmans in the Central division and for Jewel (i.e. prices on the Y-axis, unit-sales on the X-axis). Repeat the exercise for Kraft. Is there evidence for a negatively sloped demand-curve in the data? Eye-balling these plots, does demand appear more elastic in the Central Region or at Jewel (for either Hellman's or Kraft)? {.tabset}
+
+###### Hellmans
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, , fig.height= 3}
 theme_set(theme_cowplot(font_size=8))
 theme_set(theme_gray()) # reduce default font size
@@ -286,7 +302,9 @@ scatter_hellmans_jewel <- ggplot(na.omit(hellman_at_jewel), aes(x=sales_u, y=pri
 cowplot::plot_grid(scatter_hellmans_central, scatter_hellmans_jewel, labels = c("", ""), ncol = 2)
 ```
 
-#### Kraft
+Looking at the two plots above there is evidence for a negatively sloped demand-curve in the data for Hellman's in both the Central Region and at Jewel. Eye-balling these plots, demand appears to be more elastic at Jewel where a percentage change in price will seem to produce a greater percentage change in quantity demanded.
+
+###### Kraft
 ```{r, dpi=300, warning= FALSE, fig.align='center', echo=FALSE, fig.height= 3}
 scatter_kraft_central <- ggplot(kraft_at_central, aes(x=sales_u, y=price, color)) +
   theme_grey() + 
@@ -315,6 +333,8 @@ scatter_kraft_jewel <- ggplot(na.omit(kraft_at_jewel), aes(x=sales_u, y=price, c
 cowplot::plot_grid(scatter_kraft_central, scatter_kraft_jewel, labels = c("", ""), ncol = 2)
 
 ```
+
+Looking at the two plots above there is evidence for a negatively sloped demand-curve in the data for Kraft in both the Central Region and at Jewel. Eye-balling these plots, demand appears to be more elastic at Jewel where a percentage change in price will seem to produce a greater percentage change in quantity demanded.
 
 ## Demand Estimation
 
@@ -404,9 +424,14 @@ data.frame(
   row_spec(0, bold = T, color = "white", background = "#0399a8")
 ```
 
-##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator).
+The demand elasticity is higher (in absolute magnitude) at the Jewel account for both Hellman's and Kraft. While the demand is normally anticipated to be elastic at the brand level, these differences in the elasticity of demand can be possibly be explained by a number of factors. 
 
-#### Hellman at Jewel 
+the fact that
+mayonnaise occupies a relatively small share in consumer’s budget.
+
+##### 4. Forecasting demand under a price change: Using your regression results from the multiplicative demand model, compute the % change in unit sales for a 10% increase in the price of Kraft and Hellman's at Jewel. (Note: You can do this brute force in Excel, but for your benefit you should try to compute this on a sheet of paper with the help of a calculator). {.tabset}
+
+###### Hellman at Jewel 
 ```{r change_1, echo = TRUE, results = 'asis', }
 # To get the proportional change in Y associated with a p percent increase in X, calculate
 # a = ([100 + p]/100) and take a^β
@@ -428,17 +453,31 @@ compute_change <- function(percent_change, price_coeff) {
 change_hellman <- compute_change(10, price_coeff)
 ```
 
-Therefore, a 10% increase in the price of Hellman's at Jewel results in a `r change_hellman$phrase` in unit sales of Hellman's at Jewel ceteris paribus.
+A 10% increase in the price of Hellman's at Jewel results in a `r change_hellman$phrase` in unit sales of Hellman's at Jewel, ceteris paribus.
 
-#### Kraft at Jewel 
+###### Kraft at Jewel 
 ```{r change_2, echo = TRUE, results = 'asis'}
 # To get the proportional change in Y associated with a p percent increase in X, calculate
 # a = ([100 + p]/100) and take a^β
 price_coeff <- tidy_model_2$estimate[2]
+
+compute_change <- function(percent_change, price_coeff) {
+  a <- ((100 + percent_change)/100)
+  price_effect <- a^price_coeff
+  if (price_effect < 1) {
+  prop <- (1-price_effect)*100
+  direction <- "% decrease"
+  }  else {
+  prop <- (price_effect - 1)*100
+  direction <- "% increase"
+  }
+  return(list(phrase = (paste0(round(prop, digits = 2), direction)), numeric = prop))
+}
+
 change_kraft <- compute_change(10, price_coeff)
 ```
 
-Therefore, a 10% increase in the price of Kraft at Jewel results in a `r change_kraft$phrase` in unit sales of Kraft at Jewel ceteris paribus.
+A 10% increase in the price of Kraft at Jewel results in a `r change_kraft$phrase` in unit sales of Kraft at Jewel, ceteris paribus.
 
 ##### 5. Focus on the data for Kraft and Hellman’s 32 oz at Jewel. Fit the "multiplicative" demand model for Kraft and Hellman's at Jewel allowing for cross-price effects (i.e. 2 separate regressions, one for Hellman's, and one for Kraft, with Hellman's own price and Kraft's price affecting sales of Hellman's; and Kraft's own price and Hellman's price affecting sales of Kraft). 
 
@@ -484,11 +523,13 @@ stargazer(model_6,
 
 #####  6. You may be called upon to report to your manager whether your brand is vulnerable to a competitor's pricing policies. That is, to what extent does the demand for your product depend on (or is affected by) your competitors' pricing policy? From the results in 5, which brand is more "vulnerable"? Be specific as to why.
 
-Kraft at Jewel seems to be more "vulnerable" to Hellman’s pricing policy that Hellman’s is to Kraft's pricing policy at Jewel. This is motivated by the above regression analysis, where it is shown that Kraft's sales at Jewel are significantly affected by Hellman's price (with a large and statistically significant coeffcient of `r tidy_model_6$estimate[2]` at the 1% level of significance), whereas Hellman's sales at Jewel are insignificantly affected by Kraft's price (with a small and insignificant coeffcient of `r tidy_model_5$estimate[2]`).
+Kraft at Jewel seems to be more "vulnerable" to Hellman’s pricing policy than Hellman’s is to Kraft's pricing policy at Jewel. This is motivated by the above regression analysis, where it is shown that Kraft's sales at Jewel are significantly affected by Hellman's price (with a large and statistically significant coefficient of `r tidy_model_6$estimate[2]` at the 1% level of significance), whereas Hellman's sales at Jewel are insignificantly affected by Kraft's price (with a small and insignificant coefficient of `r tidy_model_5$estimate[2]`).
 
 ##### 7. While making a crucial presentation of the above results in front of your team, your analyst colleague questions your results as follows: "This is all fine. But, you know, you're missing a lot of variables in your so-called regression model. For instance, the sales of Kraft mayo at Jewel are clearly affected by store traffic. When it snows, less people visit Jewel, and you don't have such factors -- the weather, temperature, traffic congestions, etc. So aren't your cross-price effects all wrong?" Is your colleague right or wrong?
 
-My collegue is correct as the are a number of ommited variable that are potentially correlated with the price of Kraft and Hellman's mayo at Jewel but are unobserved. This would lead to ommited variable bias. (In reality, it very rarely happens that we have access to a dataset that allows us to control for all factors that could conceivably bias the estimated effect of price on sales)
+My colleague is correct as they are a number of omitted variables that are potentially correlated with both the price and sales of Kraft and Hellman's mayo at Jewel but are unobserved. This would lead to omitted variable bias. 
+
+In reality, it very rarely happens that we have access to a dataset that allows us to control for all factors that could conceivably bias the estimated effect of price on sales. Therefore, we cannot expect OLS, or any estimator that relies on regressor exogeneity for identification, to produce consistent estimates of the population model parameters. In such cases, we should consider using an alternative strategy to identify our price elasticities of interest.
 
 ##### 8. Suppose you work at Kraft, and you realize that Hellman's price is cut by 10% at Jewel. Using your estimates from 5, compute by what percent you have to lower the Kraft 32 oz price at Jewel to obtain the same sales as you currently enjoy.
 
@@ -496,6 +537,18 @@ My collegue is correct as the are a number of ommited variable that are potentia
 hellman_coeff <- tidy_model_6$estimate[2]
 kraft_coeff <- tidy_model_6$estimate[3]
 
+compute_change <- function(percent_change, price_coeff) {
+  a <- ((100 + percent_change)/100)
+  price_effect <- a^price_coeff
+  if (price_effect < 1) {
+  prop <- (1-price_effect)*100
+  direction <- "% decrease"
+  }  else {
+  prop <- (price_effect - 1)*100
+  direction <- "% increase"
+  }
+  return(list(phrase = (paste0(round(prop, digits = 2), direction)), numeric = prop))
+}
 # Hellman’s price is cut by 10% at Jewel
 change <- compute_change(-10, hellman_coeff)
 
@@ -504,8 +557,5 @@ f <- function(x)  (((((100 - x)/100)^kraft_coeff)-1)*100 - ((100/(100-change$num
                    )
 percent <- uniroot(f, lower=0, upper=100)$root
 ```
-
-Therefore, if Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by `r percent`% to obtain the same sales that we currently enjoy.
-
-
+If Hellman’s price is cut by 10% at Jewel, using our estimates from 5, we (at Kraft) would have to lower the Kraft 32 oz price at Jewel by `r percent`% to obtain the same sales that we currently enjoy (see the code above for explicit calculation).
 
