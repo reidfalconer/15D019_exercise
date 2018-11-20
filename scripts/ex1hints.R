@@ -55,7 +55,7 @@ merged.df <- function(data1, data2){
 # 1. Hellman at Jewel
 
 #get raw data and create new variables
-hellman_at_jewel <- createVariables(getdata("data/JWL_HL32.csv"))
+hellman_at_jewel <- createVariables(getdata("../data/JWL_HL32.csv"))
 
 #time series plots
 plot(hellman_at_jewel$date2, hellman_at_jewel$price, col = "blue", xy.labels = F, type = "l")
@@ -69,7 +69,7 @@ summary(runRegression(hellman_at_jewel))
 ##############################################################################3
 
 # 2. Kraft at Jewel
-kraft_at_jewel <- createVariables(getdata("data/JWL_KR32.csv"))
+kraft_at_jewel <- createVariables(getdata("../data/JWL_KR32.csv"))
 
 #time series plots
 plot(kraft_at_jewel$date2, kraft_at_jewel$price, col = "blue", xy.labels = F, type = "l")
@@ -83,7 +83,7 @@ summary(runRegression(kraft_at_jewel))
 ##############################################################################
 
 #3. Hellman at Central
-hellman_at_central <- createVariables(getdata("data/KC_HL32.csv"))
+hellman_at_central <- createVariables(getdata("../data/KC_HL32.csv"))
 
 #time series plots
 plot(hellman_at_central$date2, hellman_at_central$price, col = "blue", xy.labels = F, type = "l")
@@ -115,7 +115,7 @@ summary(runRegression(hellman_at_central))
 ##############################################################################
 
 # 4. Kraft at Central
-kraft_at_central <- createVariables(getdata("data/KC_KR32.csv"))
+kraft_at_central <- createVariables(getdata("../data/KC_KR32.csv"))
 
 #time series plots
 plot(kraft_at_central$date2, kraft_at_central$price, col = "blue", xy.labels = F, type = "l")
@@ -130,10 +130,10 @@ summary(runRegression(kraft_at_central))
 
 #############################################################################
 #Analysis on merged data
-hellman_at_jewel <- createVariables(getdata("data/JWL_HL32.csv"))
-kraft_at_jewel <- createVariables(getdata("data/JWL_KR32.csv"))
-hellman_at_central <- createVariables(getdata("data/KC_HL32.csv"))
-kraft_at_central <- createVariables(getdata( "data/KC_KR32.csv"))
+hellman_at_jewel <- createVariables(getdata("../data/JWL_HL32.csv"))
+kraft_at_jewel <- createVariables(getdata("../data/JWL_KR32.csv"))
+hellman_at_central <- createVariables(getdata("../data/KC_HL32.csv"))
+kraft_at_central <- createVariables(getdata( "../data/KC_KR32.csv"))
 
 #############################################################################
 #Hellman at Jewel with Kraft price
